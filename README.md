@@ -1,0 +1,2 @@
+# okta-jenkins-webapp
+docker run -dit -e SQLALCHEMY_DATABASE_URI=mysql://root:123456789@ec2-34-255-197-127.eu-west-1.compute.amazonaws.com:3306/records -e SQLALCHEMY_TRACK_MODIFICATIONS=FALSE -p 3000:5000 okta-jenkins-webapp

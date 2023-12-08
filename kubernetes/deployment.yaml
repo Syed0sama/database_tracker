@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: okta-jenkins-webapp-deployment
+  namespace: devops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: okta-jenkins-webapp
+  template:
+    metadata:
+      labels:
+        app: okta-jenkins-webapp
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
+              - key: instanceType
+                operator: In
+                values:
+                - spotInstance
+            weight: 1
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - okta-jenkins-webapp
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - env:
+        - name: SQLALCHEMY_TRACK_MODIFICATIONS
+          value: "FALSE"
+
+        - name: SQLALCHEMY_DATABASE_URI
+          value: mysql://root:123456789@ec2-34-255-197-127.eu-west-1.compute.amazonaws.com:3306/records
+
+
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        image: 145462797847.dkr.ecr.eu-west-1.amazonaws.com/okta-jenkins-webapp:latest
+        imagePullPolicy: Always
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /bin/sleep
+              - "15"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - pidof python
+          failureThreshold: 6
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: okta-jenkins-webapp
+        ports:
+        - containerPort: 5000
+          name: http-port
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - pidof python
+          failureThreshold: 6
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: 10m
+            memory: 50Mi
+      tolerations:
+      - effect: PreferNoSchedule
+        key: spotInstance
+        operator: Equal
+        value: "true"

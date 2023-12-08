@@ -1,0 +1,50 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-west-1:820808869900:certificate/619301f9-b9f9-437d-bb59-f4e5607334ba
+    alb.ingress.kubernetes.io/group.name: tajawal.io
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-port: "5000"
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/load-balancer-name: tajawal-prod-devops-alb-io-int
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-1-2017-01
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/success-codes: 200,301
+    alb.ingress.kubernetes.io/target-type: ip
+
+
+  name: okta-jenkins-webapp-ingress
+  namespace: devops
+spec:
+  ingressClassName: alb
+  rules:
+  - host: db-ac.tajawal.io
+    http:
+      paths:
+      - backend:
+          service:
+            name: okta-jenkins-webapp-service
+            port:
+              number: 5000
+        pathType: ImplementationSpecific
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: okta-jenkins-webapp-service
+  namespace: devops
+spec:
+  ports:
+  - name: tcp
+    port: 5000
+    protocol: TCP
+    targetPort: http-port
+  selector:
+    app: okta-jenkins-webapp
+
+
+

@@ -1,0 +1,8 @@
+<p style="font-family:verdana">
+    Choose Job Position Applying for:<SELECT name="language" style="font-family:verdana">
+        {% for row in table_data %}
+
+            <option value="{{row['component']}}">{{row}}</option>
+        {% endfor %}
+    </SELECT>
+    </p>

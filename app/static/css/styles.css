@@ -1,0 +1,78 @@
+
+body, main
+{
+  min-height: 100vh;
+  height: 100%;
+  /* background: linear-gradient(rgb(214, 210, 210),rgba(230, 225, 225, 0.1)), url("/images/seera3.jpg"); */
+  /* background-image: url('/static/seera.jpg'); */
+  background: linear-gradient(rgb(214, 210, 210), rgba(230, 225, 225, 0.1)), url("../images/bg.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+#logo{
+  padding-left: 630px;
+}
+
+#button {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* Adjust margin as needed */
+}
+
+.dropbtn {
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+#forum{
+  padding-left: 130px;
+  padding-right: 200px;
+  padding-top: 130px;
+  color: rgb(0, 0, 0);
+}
+
+#text{
+  padding-left: 83px;
+  padding-right: 150px;
+  padding-top: 130px;
+  text-align: left;
+  color: rgb(0, 0, 0);
+  font-size: large;
+}
+
+h1,.h1{
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 60px;
+  
+ 
+}
+.summary{
+ padding-left: 100px;  
+}
+
+
+.range{
+
+  padding-left: -50px;
+  
+}
+
+
+
+#outPopUp {
+  position: absolute;
+  /* padding-top: 60px;
+  padding-right: 80px; */
+  /* width: 5000px;
+  height: 2000px; */
+  /* z-index: 15; */
+  top: 49%;
+  left: 11%;
+  /* margin: -100px 0 0 -150px;
+  background: red; */
+}
